@@ -1,0 +1,17 @@
+name: Notify
+
+on:
+  push:
+    branches-ignore:
+      - latest
+      - master
+
+jobs:
+     Notify:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Check for Issues
+           run:gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage'
+
+        - name: Check for issues
+        
