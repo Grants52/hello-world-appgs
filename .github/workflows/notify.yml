@@ -15,8 +15,8 @@ jobs:
         - name: Check for Issues
           run: |
             gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage'
-            
+            result="$(gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage' 2>&1)"
         - name: send slack message
           run: |
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' ${{ secrets.GITHUB_TOKEN }}
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"$result"}' ${{ secrets.GITHUB_TOKEN }}
         
