@@ -18,13 +18,13 @@ jobs:
             gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage'
             
         - name: Get version from package.json after release step
-          id: listissues
+          id: initversion
           run: |
             echo "::set-output name=version::$(gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage')"
 
-        - name: Check for Issues
+        - name: Check for Issues2
           run: |
-            echo "${{steps.listissues.outputs.version}}"
+            echo "the initial version is ${{steps.initversion.outputs.version}}"
 
         - name: send slack message
           env:
