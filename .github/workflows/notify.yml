@@ -15,13 +15,14 @@ jobs:
         - name: Check for Issues
           run: |
             gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage'
-            result=$(( gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage' ) 2>&1)
+            
                         
         - name: send slack message
           env:
              ISSUES_URL: https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%8F%B1+Awaiting+triage%22
           run: |
             ISSUES_URL=https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%8F%B1+Awaiting+triage%22
+            result=$(( gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage' ) 2>&1)
             slack_triage () {
             curl -X POST -H 'Content-type: application/json' --data '{"text":"There are <'$ISSUES_URL'|Triage issues> to review this morning"}'  ${{ secrets.SLACK_TOKEN }}
             }
@@ -29,7 +30,7 @@ jobs:
             curl -X POST -H 'Content-type: application/json' --data '{"text":"There are no issues to Triage this morning"}' ${{ secrets.SLACK_TOKEN }}
             }
             echo $result
-            #if [[  `echo $result` == Showing* ]]; then slack_triage ; else slack_notriage; fi
+            if [[  `echo $result` == Showing* ]]; then slack_triage ; else slack_notriage; fi
             
             
             #curl -X POST -H 'Content-type: application/json' --data '{"text":"testing"}' ${{ secrets.SLACK_TOKEN }}
