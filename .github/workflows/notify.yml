@@ -22,6 +22,10 @@ jobs:
           run: |
             echo "::set-output name=listissues::$(gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage')"
 
+        - name: Check for Issues
+          run: |
+            echo "${{steps.listissues.outputs.version}}"
+
         - name: send slack message
           env:
              ISSUES_URL: https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%8F%B1+Awaiting+triage%22
@@ -36,8 +40,7 @@ jobs:
             curl -X POST -H 'Content-type: application/json' --data '{"text":"There are no issues to Triage this morning"}' ${{ secrets.SLACK_TOKEN }}
             }
             
-            echo ${{steps.listissues.outputs.version}}"
-            
+                      
             
             
             #if [[  `echo $result` == Showing* ]]; then slack_triage ; else slack_notriage; fi
