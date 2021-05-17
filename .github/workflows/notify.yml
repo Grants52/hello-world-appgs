@@ -17,14 +17,14 @@ jobs:
           run: |
             gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage'
             
-        - name: Get version from package.json after release step
-          id: initversion
-          run: |
-            echo "::set-output name=version::$(( gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage' ) 2>&1)"
+        # - name: Get version from package.json after release step
+        #   id: initversion
+        #   run: |
+        #     echo "::set-output name=version::$(( gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage' ) 2>&1)"
 
-        - name: Check for Issues2
-          run: |
-            echo "the initial version is ${{steps.initversion.outputs.version}}"
+        # - name: Check for Issues2
+        #   run: |
+        #     echo "the initial version is ${{steps.initversion.outputs.version}}"
 
         - name: send slack message
           env:
@@ -43,7 +43,7 @@ jobs:
                       
             
             
-            #if [[  `echo $result` == Showing* ]]; then slack_triage ; else slack_notriage; fi
+            if [[  `echo $result` == *"Awaiting triage"* ]]; then slack_triage ; else slack_notriage; fi
             
             #curl -X POST -H 'Content-type: application/json' --data '{"text":"testing"}' ${{ secrets.SLACK_TOKEN }}
         
