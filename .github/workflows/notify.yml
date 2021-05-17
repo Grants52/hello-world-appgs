@@ -28,8 +28,8 @@ jobs:
             slack_notriage () {
             curl -X POST -H 'Content-type: application/json' --data '{"text":"There are no issues to Triage this morning"}' ${{ secrets.SLACK_TOKEN }}
             }
-            
-            if [[  `echo $result` == Showing* ]]; then slack_triage ; else slack_notriage; fi
+            echo $result
+            #if [[  `echo $result` == Showing* ]]; then slack_triage ; else slack_notriage; fi
             
             
             #curl -X POST -H 'Content-type: application/json' --data '{"text":"testing"}' ${{ secrets.SLACK_TOKEN }}
