@@ -25,6 +25,11 @@ jobs:
             curl -X POST -H 'Content-type: application/json' --data '{"text":"There are <'$ISSUES_URL'|Triage issues> to review this morning"}'  
             ${{ secrets.SLACK_TOKEN }}
             }
+            slack_notriage () {
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"There are no issues to Triage this morning"}'
+            ${{ secrets.SLACK_TOKEN }}
+            }
+            
             if [[  `echo $result` == Showing* ]]; then slack_triage ; else slack_notriage; fi
             
             
