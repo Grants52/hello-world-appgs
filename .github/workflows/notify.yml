@@ -12,11 +12,16 @@ jobs:
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       steps:
+        
         - name: Check for Issues
           run: |
             gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage'
             
-                        
+        - name: Get version from package.json after release step
+        id: listissues
+        run: |
+          echo "::set-output name=listissues::$(gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage')"
+
         - name: send slack message
           env:
              ISSUES_URL: https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%8F%B1+Awaiting+triage%22
@@ -31,7 +36,7 @@ jobs:
             curl -X POST -H 'Content-type: application/json' --data '{"text":"There are no issues to Triage this morning"}' ${{ secrets.SLACK_TOKEN }}
             }
             
-            echo $result
+            echo ${{steps.listissues.outputs.version}}"
             
             
             
