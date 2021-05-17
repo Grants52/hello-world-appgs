@@ -26,24 +26,38 @@ jobs:
         #   run: |
         #     echo "the initial version is ${{steps.initversion.outputs.version}}"
 
-        - name: send slack message
+        - name: Send slack message for triage issues
           env:
-             ISSUES_URL: https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%8F%B1+Awaiting+triage%22
+             TRIAGE_URL: https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%8F%B1+Awaiting+triage%22
           run: |
-            ISSUES_URL=https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%8F%B1+Awaiting+triage%22
+            
             result=$(( gh issue list --repo Grants52/hello-world-appgs -l '⏱ Awaiting triage' ) 2>&1)
             
             slack_triage () {
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"There are <'$ISSUES_URL'|Triage issues> to review this morning"}'  ${{ secrets.SLACK_TOKEN }}
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"There are <'$TRIAGE_URL'|Triage issues> to review this morning"}'  ${{ secrets.SLACK_TOKEN }}
             }
             slack_notriage () {
             curl -X POST -H 'Content-type: application/json' --data '{"text":"There are no issues to Triage this morning"}' ${{ secrets.SLACK_TOKEN }}
-            }
-            
-                      
-            
+            }          
             
             if [[  `echo $result` == *"Awaiting triage"* ]]; then slack_triage ; else slack_notriage; fi
             
             #curl -X POST -H 'Content-type: application/json' --data '{"text":"testing"}' ${{ secrets.SLACK_TOKEN }}
         
+        - name: Send slack message for stale issues
+          env:
+             STALE_URL: https://github.com/Grants52/hello-world-appgs/issues?q=is%3Aissue+is%3Aopen+label%3A%22Status%3A+Stale%22
+          run: |
+            
+            result=$(( gh issue list --repo Grants52/hello-world-appgs -l 'Status: Stale' ) 2>&1)
+            
+            slack_stale () {
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"There are <'$STALE_URL'|Stale issues> to review this morning"}'  ${{ secrets.SLACK_TOKEN }}
+            }
+            slack_nostale () {
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"There are no Stale issues to this morning"}' ${{ secrets.SLACK_TOKEN }}
+            }          
+            
+            if [[  `echo $result` == *"Status: Stale"* ]]; then slack_stale ; else slack_nostale; fi
+            
+            
